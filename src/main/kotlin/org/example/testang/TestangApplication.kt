@@ -46,7 +46,13 @@ class TestangApplication(
 
     @RequestMapping("/randomDiceRoll")
     fun randomDiceRoll(): String {
-        return "${Random.nextInt(1, 6)} was rolled!"
+
+        val diceRoll = Random.nextInt(1, 6)
+
+        return """
+            <p>${diceRoll} was rolled!</p>
+            <img src="/dice-${diceRoll}.png" alt="Image of a dice with ${diceRoll} on the face" width="128" height="128">
+        """
     }
 
     @PostMapping("/addUser")
