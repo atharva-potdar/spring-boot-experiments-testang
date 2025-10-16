@@ -23,6 +23,8 @@ data class GetStudentRequest(
     val name: String,
 )
 
+// TODO: Refactor and improve structure using best practices of Spring
+
 @RestController
 @Validated
 @SpringBootApplication
