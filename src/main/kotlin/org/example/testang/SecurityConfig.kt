@@ -22,6 +22,7 @@ class SecurityConfig {
 
                 authorize
                     .requestMatchers("/h2-console/**").authenticated()
+                    .requestMatchers("/tryAuthentication").authenticated()
                     .anyRequest().permitAll()
 
             }

@@ -3,6 +3,7 @@ package org.example.testang
 import jakarta.validation.constraints.Pattern
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PathVariable
@@ -72,6 +73,11 @@ class TestangApplication(
         } else {
             "ID: ${savedStudent.id}, Name: ${savedStudent.name}"
         }
+    }
+
+    @RequestMapping("/tryAuthentication")
+    fun tryAuthentication(): String {
+        return "Welcome ${SecurityContextHolder.getContext().authentication.name}!"
     }
 
 }
