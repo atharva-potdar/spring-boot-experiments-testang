@@ -6,6 +6,7 @@ import org.springframework.boot.runApplication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -33,18 +34,18 @@ class TestangApplication(
     private val passwordEncoder: PasswordEncoder,
 ) {
 
-    @RequestMapping("/")
+    @GetMapping("/")
     fun home(): String {
         return "hello, world!"
     }
 
     // Perform input validation to prevent any XSS
-    @RequestMapping("/greet/{name}")
+    @GetMapping("/greet/{name}")
     fun greetUser(@PathVariable @Pattern(regexp = "[a-zA-Z0-9\\s]+") name: String): String {
         return "hello, $name! hope you have a good day."
     }
 
-    @RequestMapping("/randomDiceRoll")
+    @GetMapping("/randomDiceRoll")
     fun randomDiceRoll(): String {
 
         val diceRoll = Random.nextInt(1, 6)
@@ -69,7 +70,7 @@ class TestangApplication(
         return "Created Student ${savedStudent.name} with ID ${savedStudent.id}"
     }
 
-    @RequestMapping("/getUser")
+    @GetMapping("/getUser")
     fun getUser(@RequestBody request: GetStudentRequest): String {
 
         // What happens when the user doesn't exist?
@@ -81,13 +82,15 @@ class TestangApplication(
         }
     }
 
-    @RequestMapping("/tryAuthentication")
+    @GetMapping("/tryAuthentication")
     fun tryAuthentication(): String {
         return "Welcome ${SecurityContextHolder.getContext().authentication.name}!"
     }
 
     @PostMapping("/deleteUser")
     fun deleteUser(@RequestBody request: GetStudentRequest): String {
+
+        // TODO: Move this logic over to roles
         if (SecurityContextHolder.getContext().authentication.name != "admin") {
             return "Only admin can delete users"
         } else {
