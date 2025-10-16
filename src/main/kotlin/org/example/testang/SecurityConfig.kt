@@ -23,18 +23,13 @@ class SecurityConfig {
                 authorize
                     .requestMatchers("/h2-console/**").authenticated()
                     .requestMatchers("/tryAuthentication").authenticated()
+                    .requestMatchers("/deleteUser").authenticated()
                     .anyRequest().permitAll()
 
             }
             .formLogin { } // enables the login page
             .logout { } // add a logout page at /logout
-            .csrf { csrf ->
-                csrf.ignoringRequestMatchers("/h2-console/**")
-                // By default, CSRF is enabled, it causes a 403 when logging into h2-console
-                // So, we disable it
-                // Fucking CSRF messing things up again
-                csrf.ignoringRequestMatchers("/addUser")
-            }
+            .csrf { csrf -> csrf.disable() }
             .headers { headers->
                 // X-Frame-Options disallows embedding a web page in a frame to prevent clickjacking
                 // Unfortunately, h2-console still uses frames to render its console (no wonder looking at its console lol)

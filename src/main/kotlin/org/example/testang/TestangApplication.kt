@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import kotlin.random.Random
 
-data class AddStudentRequest(
+data class StudentAuthRequest(
     val name: String,
     val password: String
 )
@@ -56,7 +56,7 @@ class TestangApplication(
     }
 
     @PostMapping("/addUser")
-    fun addUser(@RequestBody request: AddStudentRequest): String {
+    fun addUser(@RequestBody request: StudentAuthRequest): String {
 
         // Fully initialized, contains ID
         val savedStudent = studentRepository.save(
@@ -84,6 +84,21 @@ class TestangApplication(
     @RequestMapping("/tryAuthentication")
     fun tryAuthentication(): String {
         return "Welcome ${SecurityContextHolder.getContext().authentication.name}!"
+    }
+
+    @PostMapping("/deleteUser")
+    fun deleteUser(@RequestBody request: GetStudentRequest): String {
+        if (SecurityContextHolder.getContext().authentication.name != "admin") {
+            return "Only admin can delete users"
+        } else {
+            val student = studentRepository.findByName(request.name)
+            if (student == null) {
+                return "Student not found."
+            } else {
+                studentRepository.delete(student)
+                return "Deleted student ${request.name}"
+            }
+        }
     }
 
 }
