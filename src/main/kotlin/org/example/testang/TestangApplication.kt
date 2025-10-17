@@ -61,7 +61,7 @@ class TestangApplication(
     @PostMapping("/addUser")
     fun addUser(@RequestBody request: StudentAuthRequest): String {
 
-        if (studentRepository.findByName(request.name) == null) {
+        if (studentRepository.findByName(request.name) != null) {
             return "User already exists."
         }
 
