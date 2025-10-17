@@ -1,5 +1,6 @@
 package org.example.testang
 
+import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.core.userdetails.User
@@ -20,6 +21,17 @@ class ApplicationConfig {
     @Bean
     fun passwordEncoder(): PasswordEncoder {
         return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8()
+    }
+
+    // Default password initialization
+    @Bean
+    fun init(studentRepository: StudentRepository, encoder: PasswordEncoder) = CommandLineRunner {
+        if (studentRepository.findByName("admin") == null) {
+            studentRepository.save(Student(
+                name = "admin",
+                password = encoder.encode("admin")
+            ))
+        }
     }
 
 }
